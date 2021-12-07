@@ -21,7 +21,7 @@ BW1st <- two_games %>% mutate(
   runner_2nd = !is.na(On2B),  # runner on 2nd = TRUE, 2nd base empty = FALSE
   runner_3rd = !is.na(On3B), # runner on 3rd = TRUE, 3rd base empty = FALSE
   first_runners = case_when( #statement on left want to evaluate if T or F
-  # first runner is safe if theyre on the second base after first inning
+    # first runner is safe if theyre on the second base after first inning
     #Need a statement for when runner_1st but not runner_2nd -> return a 1 (for someone on base 1)
     !runner_1st & !runner_2nd & !runner_3rd ~ "0",#no runner on 1st and 2nd and 3rd
     runner_1st &!runner_2nd & !runner_3rd ~ "1", #runner on 1st, but not on 2nd and 3rd
@@ -34,9 +34,9 @@ BW1st <- two_games %>% mutate(
   )
 )%>% 
   
-# if outs and outs_end are equal, batter did not get out
-# otherwise, there was at least one out on the play
-mutate(batter_out = if_else(outs == outs_end, "N", "Y"))
+  # if outs and outs_end are equal, batter did not get out
+  # otherwise, there was at least one out on the play
+  mutate(batter_out = if_else(outs == outs_end, "N", "Y"))
 
 
 #VANESSA Fix this
@@ -87,6 +87,17 @@ BWinnings %>% group_by(batting_team, first_batter_out) %>% summarise(
   median.runs.scored = median(total_runs)
 )
 
+ggplot(BWinnings, aes(x = total_runs)) +geom_histogram(center = 0, binwidth = 1) + facet_grid(first_batter_out~batting_team)
+ggplot(BWinnings, aes(x = total_runs)) +geom_histogram(center = 0, binwidth = 1)
 
+ggplot(BWinnings, aes(x = total_runs)) +geom_histogram(center = 0, binwidth = 1) + facet_grid(.~first_batter_out)
 
+CSUF_pitching <- BWinnings %>% filter(pitching_team == "Cal St. Fullerton")
+CSUF_batting <- BWinnings %>% filter(batting_team == "Cal St. Fullerton")
 
+ggplot(CSUF_pitching, aes(x = total_runs)) +geom_histogram(center = 0, binwidth = 1) + facet_grid(first_batter_out~.)
+
+xtabs(~first_batter_out + total_runs, data = BWinnings)  ## for all teams in BW
+xtabs(~first_batter_out + total_runs + pitching_team, data = BWinnings)
+
+ggplot(BWinnings, aes(x = total_runs)) +geom_histogram(center = 0, binwidth = 1) + facet_grid(first_batter_out~pitching_team)
