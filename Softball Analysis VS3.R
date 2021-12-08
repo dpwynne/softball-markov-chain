@@ -101,3 +101,7 @@ xtabs(~first_batter_out + total_runs, data = BWinnings)  ## for all teams in BW
 xtabs(~first_batter_out + total_runs + pitching_team, data = BWinnings)
 
 ggplot(BWinnings, aes(x = total_runs)) +geom_histogram(center = 0, binwidth = 1) + facet_grid(first_batter_out~pitching_team)
+
+ggplot(BWinnings, aes(x = total_runs)) +geom_histogram(center = 0, binwidth = 1) + facet_grid(first_batter_out~batting_team)
+ggplot(BWinnings, aes(x = total_runs)) +geom_histogram(center = 0, binwidth = 1)
+
