@@ -1,5 +1,3 @@
-
-
 Simulated_inning <- function(Y,P1,P2,P3,P4,P5,P6,P7,P8,P9){
 # Function to calculate different player's U matrices.
 # Y: a data frame containing the number of at-bats, hits, doubles, triples, home runs and walks for each player.
@@ -23,6 +21,9 @@ P <- array(c(
 
 
 # flip between U0 and U1 - U0 = Un and U1 = UnPlusOne
+# This works for start of inning
+# We need to extract creation of U0 based on current inning state - separate function
+# then add U0 as an input
 U0 <- matrix(data = 0L, ncol = 25, nrow = 21)
 U1 <- U0
 U0[1,1] <- 1

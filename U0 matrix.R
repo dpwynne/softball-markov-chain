@@ -1,5 +1,5 @@
 
-
+# turn this into a function based on the state indicated by the input
 
 U0 <- matrix(data = 0L, ncol = 25, nrow = 21)
 U0[1,1] <- 1
