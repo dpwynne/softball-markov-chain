@@ -1,6 +1,9 @@
 library(shiny)
 library(shinyjs)
 
+Softball_data1 <- readxl::read_excel("Data/Softball_data1.xlsx")
+source("debugged iteration.R")
+
 ## We can ask them to rename a file player_stats.csv and overwrite the old player_stats.csv
 # in the Data folder before running
 # Either keep the upload button or just write one line of code here to import player_stats.csv
