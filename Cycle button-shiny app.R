@@ -91,7 +91,7 @@ ui <- fluidPage(sidebarPanel(width = 12,
                              sliderInput("outs", "Please Insert The Current Number Of Outs", value = 1, min = 0, max = 2),
                              
                              # 9 drop downs to insert batting order
-                             h3("You will now insert the batting order using player number"),
+                             h3("Please Insert the Batting Order Starting with Current Batter"),
                              br(),
                              
                              drops <- fluidRow(
@@ -120,18 +120,18 @@ ui <- fluidPage(sidebarPanel(width = 12,
                              br(),
                              
                              # Slider input the indicate the probability of success
-                             sliderInput("success", "Probability of Success", value = 50, min = 0, max = 100),
+                             sliderInput("success", "Estimated Chance of Success", value = 50, min = 0, max = 100),
                              
                              br(), 
                              
                              # Action button to clear data back to default
                              actionButton("resetAll", "Clear", class = "btn-danger"),
                              
-                             br(),
+                             #br(),
                              
                              
                              # Action button to cycle players
-                             actionButton("goButton", "Cycle"),
+                             actionButton("goButton", "Cycle Batters"),
                              
                              
                              
@@ -159,8 +159,6 @@ server = function(input, output, session) {
     # Function to calculate different player's U matrices.
     # Y: a data frame containing the number of at-bats, hits, doubles, triples, home runs and walks for each player.
     # P1-P9: integers - the player number to compute the U matrix for.
-    
-    
     
     # Create a 25 x 25 x 9 array for the player transition matrices
     # Check here to make sure that each 3rd dimension (25 x 25 matrix) has the right numbers
@@ -275,9 +273,6 @@ server = function(input, output, session) {
     
   }
   
-  
-  
-  
   # "No steal" matrix - runner on 1st, input$outs outs state
   simulate_nosteal <- reactive({
     U0_nosteal <- matrix(data = 0L, ncol = 25, nrow = 21)
@@ -305,7 +300,7 @@ server = function(input, output, session) {
                prob = c(simulate_nosteal(), simulated_steal())
     )
   })
-  #  inning <-   
+
   output$run_distribution <- renderPlot({
     #  ggplot faceted by situation ("No Steal Attempt" vs. "Steal Attempt)
     ggplot(inning() %>% filter(prob > 0.001), 
@@ -313,18 +308,14 @@ server = function(input, output, session) {
       geom_text(aes(x = runs, y = prob, 
                     label = paste0(round(100*prob,1), "%")), 
                 vjust = -0.5) +
-      scale_y_continuous(expand = c(0.1, 0)) +
+      scale_y_continuous(expand = c(0.1, 0), labels = percent) +
       scale_x_continuous(breaks = seq(0, 20)) +
       facet_grid(Situation~.) +
-      scale_color_manual(values = c("red","blue"))+
+      scale_fill_manual(values = c("#FF7900","#00274C"))+
       theme(strip.text = element_text(
         size = 12, color = "black"))+
-      scale_y_continuous(labels=percent)+
       expand_limits(y = 1)+
-      theme(axis.title.y=element_blank())
-    
-    
-    
+      theme(axis.title.y=element_blank(), legend.position = "none")
     
   })
   
@@ -336,19 +327,12 @@ server = function(input, output, session) {
       `Expected Runs` = sum(runs*prob),
       `Std. Dev. of Runs` = sqrt(sum((runs - `Expected Runs`)^2*prob)) 
     )
-    #paste("Lineup:", input$"Number1")
   })
   
   # reset the inputs - Clear button
   observeEvent(input$resetAll, {
     reset("panel")
   })
-  
-  
-  
-  
-  
-  
   
   observeEvent(input$goButton,{
     req(input$Number1)
